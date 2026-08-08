@@ -9,6 +9,7 @@ declare module 'imagetracerjs' {
     colorquantcycles?: number;
     numberofcolors?: number;
     mincolorratio?: number;
+    colorsampling?: number;
     
     // SVG options
     scale?: number;
