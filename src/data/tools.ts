@@ -21,6 +21,15 @@ export const tools: Tool[] = [
     status: "available",
   },
   {
+    id: "pdf-to-word",
+    name: "PDF to Word",
+    description: "Convert PDF documents into editable Word files.",
+    category: "pdf",
+    icon: FileText,
+    href: "/tools/pdf-to-word",
+    status: "available",
+  },
+  {
     id: "pdf-to-image",
     name: "PDF to Image",
     description: "Convert PDF pages into images.",

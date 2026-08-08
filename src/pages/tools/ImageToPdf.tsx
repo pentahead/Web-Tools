@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { UploadCloud, Settings, FileText, Download, Loader2, X, GripVertical, Plus } from 'lucide-react';
+import { Settings, FileText, Download, Loader2, X, GripVertical, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import FileUploadZone from '@/components/shared/FileUploadZone';
 import { generatePdf, type PageSize, type Orientation, type Margin, type ImageFit, type PdfSettings } from '@/lib/image-to-pdf/pdf-generator';
 import {
   DndContext,
@@ -65,7 +66,6 @@ function SortableImageItem({ item, onRemove }: { item: ImageItem; onRemove: (id:
 
 export default function ImageToPdf() {
   const [items, setItems] = useState<ImageItem[]>([]);
-  const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -113,31 +113,6 @@ export default function ImageToPdf() {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files) {
-      processFiles(e.dataTransfer.files);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      processFiles(e.target.files);
-    }
-    e.target.value = '';
-  };
-
   const handleRemove = (id: string) => {
     setItems(prev => {
       const filtered = prev.filter(item => item.id !== id);
@@ -146,6 +121,13 @@ export default function ImageToPdf() {
       return filtered;
     });
     setPdfUrl(null);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      processFiles(e.target.files);
+    }
+    e.target.value = '';
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -194,34 +176,14 @@ export default function ImageToPdf() {
         </div>
 
         {items.length === 0 ? (
-          <div 
-            className={cn(
-              "flex-1 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-8 transition-all duration-300 transform bg-white dark:bg-slate-900",
-              isDragging 
-                ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 scale-[0.99] shadow-inner" 
-                : "border-slate-300 dark:border-slate-700 hover:bg-slate-100/50 dark:hover:bg-slate-800/30"
-            )}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-full shadow-sm mb-4 transition-transform group-hover:scale-105">
-              <UploadCloud size={32} className="text-blue-500" />
-            </div>
-            <h2 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200">Drop images here</h2>
-            <p className="text-slate-500 mb-6">Supports PNG, JPG, JPEG up to 10MB</p>
-            
-            <label className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium cursor-pointer transition-colors shadow-sm hover:shadow-md inline-block">
-              Choose Images
-              <input 
-                type="file" 
-                className="hidden" 
-                accept="image/png, image/jpeg, image/jpg, image/webp" 
-                multiple
-                onChange={handleFileChange}
-              />
-            </label>
-          </div>
+          <FileUploadZone 
+            accept="image/png, image/jpeg, image/jpg, image/webp"
+            maxSizeMB={10}
+            multiple={true}
+            onFilesSelected={processFiles}
+            title="Drop images here"
+            subtitle="Supports PNG, JPG, JPEG up to 10MB"
+          />
         ) : (
           <div className="flex flex-col flex-1">
             <div className="flex justify-between items-center mb-4">
