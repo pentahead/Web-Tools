@@ -52,7 +52,8 @@ export const tools: Tool[] = [
     description: "Reduce PDF file size.",
     category: "pdf",
     icon: FileDown,
-    status: "coming-soon",
+    href: "/tools/compress-pdf",
+    status: "available",
   },
   {
     id: "merge-pdf",
@@ -60,6 +61,16 @@ export const tools: Tool[] = [
     description: "Combine multiple PDFs into one.",
     category: "pdf",
     icon: Layers,
-    status: "coming-soon",
+    href: "/tools/merge-pdf",
+    status: "available",
+  },
+  {
+    id: "organize-pdf",
+    name: "Organize PDF",
+    description: "Reorder, rotate, and remove PDF pages.",
+    category: "pdf",
+    icon: FileText,
+    href: "/tools/organize-pdf",
+    status: "available",
   },
 ];

@@ -5,6 +5,9 @@ import ImageToSvg from './pages/tools/ImageToSvg';
 import ImageToPdf from './pages/tools/ImageToPdf';
 import PdfToWord from './pages/tools/PdfToWord';
 import RemoveBackground from './pages/tools/RemoveBackground';
+import CompressPdf from './pages/tools/CompressPdf';
+import MergePdf from './pages/tools/MergePdf';
+import OrganizePdf from './pages/tools/OrganizePdf';
 
 export default function App() {
   return (
@@ -16,6 +19,9 @@ export default function App() {
           <Route path="tools/image-to-pdf" element={<ImageToPdf />} />
           <Route path="tools/remove-background" element={<RemoveBackground />} />
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
+          <Route path="tools/compress-pdf" element={<CompressPdf />} />
+          <Route path="tools/merge-pdf" element={<MergePdf />} />
+          <Route path="tools/organize-pdf" element={<OrganizePdf />} />
         </Route>
       </Routes>
     </BrowserRouter>
