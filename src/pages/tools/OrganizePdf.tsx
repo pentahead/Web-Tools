@@ -63,52 +63,52 @@ function SortablePageItem({
       ref={setNodeRef} 
       style={style} 
       className={cn(
-        "bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col group",
-        isDragging ? "opacity-50 ring-2 ring-blue-500 scale-105" : ""
+        "bg-card rounded-[10px] border shadow-[0_2px_10px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col group transition-all",
+        isDragging ? "opacity-90 ring-1 ring-foreground scale-105 border-foreground" : "border-border hover:border-muted-foreground"
       )}
     >
       <div 
-        className="p-3 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between cursor-grab active:cursor-grabbing"
+        className="p-3 bg-secondary/50 border-b border-border flex items-center justify-between cursor-grab active:cursor-grabbing"
         {...attributes} 
         {...listeners}
       >
-        <div className="flex items-center gap-2 text-slate-500">
-          <GripVertical size={16} />
-          <span className="text-sm font-medium">Page {page.originalIndex + 1}</span>
+        <div className="flex items-center gap-2 text-muted-foreground group-hover:text-foreground">
+          <GripVertical size={14} strokeWidth={2} />
+          <span className="text-[12px] font-display font-medium uppercase tracking-widest">Page {page.originalIndex + 1}</span>
         </div>
       </div>
       
       <div 
-        className="relative flex-1 p-4 bg-[#e5e7eb] dark:bg-[#0f172a] cursor-pointer"
+        className="relative flex-1 p-4 bg-secondary cursor-pointer border-b border-border"
         onClick={() => onPreview(page)}
       >
         <PdfThumbnail 
           pdf={pdf} 
           pageNumber={page.originalIndex + 1} 
           rotation={page.rotation} 
-          className="w-full h-auto mx-auto pointer-events-none" 
+          className="w-full h-auto mx-auto pointer-events-none drop-shadow-md" 
         />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="bg-white text-slate-700 p-2 rounded-full shadow-lg">
-            <ZoomIn size={20} />
+        <div className="absolute inset-0 bg-background/0 group-hover:bg-foreground/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="bg-background text-foreground p-3 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
+            <ZoomIn size={18} strokeWidth={2} />
           </div>
         </div>
       </div>
       
-      <div className="p-2 bg-white dark:bg-slate-800 flex items-center justify-center gap-2">
+      <div className="p-2 bg-card flex items-center justify-center gap-2">
         <button 
           onClick={() => onRotate(page.id)}
-          className="flex-1 py-1.5 flex items-center justify-center text-slate-600 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-300 dark:hover:text-blue-400 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+          className="flex-1 py-2 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary rounded-[6px] transition-colors"
           title="Rotate 90°"
         >
-          <RotateCw size={18} />
+          <RotateCw size={16} strokeWidth={2} />
         </button>
         <button 
           onClick={() => onDelete(page.id)}
-          className="flex-1 py-1.5 flex items-center justify-center text-slate-600 hover:text-red-600 hover:bg-red-50 dark:text-slate-300 dark:hover:text-red-400 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+          className="flex-1 py-2 flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-[6px] transition-colors"
           title="Delete Page"
         >
-          <Trash2 size={18} />
+          <Trash2 size={16} strokeWidth={2} />
         </button>
       </div>
     </div>
@@ -224,90 +224,92 @@ export default function OrganizePdf() {
 
   if (!file || !pdf) {
     return (
-      <div className="flex-1 flex flex-col p-6 bg-slate-50 dark:bg-slate-950 overflow-y-auto">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white">
-            <FileText size={24} />
+      <div className="flex-1 flex flex-col p-8 md:p-12 bg-background overflow-y-auto">
+        <div className="mb-8 flex items-center gap-4 max-w-[1200px] mx-auto w-full">
+          <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+            <FileText size={28} strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Organize PDF</h2>
-            <p className="text-sm text-slate-500">Reorder, rotate, and remove pages from your PDF.</p>
+            <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">Organize PDF</h2>
+            <p className="text-[15px] font-light text-muted-foreground">Reorder, rotate, and remove pages from your PDF.</p>
           </div>
         </div>
         
         {loading ? (
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <Loader2 className="w-10 h-10 animate-spin text-blue-500 mb-4" />
-            <p className="text-slate-500">Loading PDF document...</p>
+          <div className="flex-1 flex flex-col items-center justify-center max-w-[1200px] mx-auto w-full">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" strokeWidth={1.5} />
+            <p className="text-[14px] font-light text-muted-foreground">Loading PDF document...</p>
           </div>
         ) : (
-          <FileUploadZone 
-            accept="application/pdf,.pdf"
-            maxSizeMB={50}
-            multiple={false}
-            onFilesSelected={handleFilesSelected}
-            title="Drop PDF here"
-            subtitle="PDF • Max 50 MB"
-          />
+          <div className="max-w-[1200px] mx-auto w-full flex-1 flex flex-col">
+            <FileUploadZone 
+              accept="application/pdf,.pdf"
+              maxSizeMB={50}
+              multiple={false}
+              onFilesSelected={handleFilesSelected}
+              title="Drop PDF here"
+              subtitle="PDF • Max 50 MB"
+            />
+          </div>
         )}
       </div>
     );
   }
 
   const sidebar = (
-    <div className="flex flex-col h-full">
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="font-semibold text-lg mb-6 text-slate-800 dark:text-slate-200">
+    <div className="flex flex-col h-full bg-card">
+      <div className="p-8 flex-1 flex flex-col">
+        <h3 className="font-display font-medium text-[16px] mb-8 text-foreground tracking-tight">
           Document Status
         </h3>
         
-        <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 space-y-3 mb-6">
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-500">Original</span>
-            <span className="font-medium text-slate-700 dark:text-slate-300">{pdf.numPages} pages</span>
+        <div className="bg-secondary rounded-[10px] p-5 border border-border space-y-4 mb-6">
+          <div className="flex justify-between items-center text-[14px]">
+            <span className="font-light text-muted-foreground">Original</span>
+            <span className="font-medium text-foreground">{pdf.numPages} pages</span>
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-500">New Order</span>
-            <span className="font-medium text-slate-700 dark:text-slate-300">{pages.length} pages</span>
+          <div className="flex justify-between items-center text-[14px]">
+            <span className="font-light text-muted-foreground">New Order</span>
+            <span className="font-medium text-foreground">{pages.length} pages</span>
           </div>
           {pdf.numPages - pages.length > 0 && (
-            <div className="flex justify-between items-center text-sm text-amber-600 dark:text-amber-400">
-              <span>Removed</span>
-              <span className="font-medium">{pdf.numPages - pages.length} pages</span>
+            <div className="flex justify-between items-center text-[14px] text-destructive pt-2 border-t border-border">
+              <span className="font-medium">Removed</span>
+              <span className="font-bold">{pdf.numPages - pages.length} pages</span>
             </div>
           )}
         </div>
 
         {resultUrl && (
-          <div className="mt-4 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-xl text-center">
-            <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">Saved Successfully</h4>
+          <div className="mt-4 p-6 bg-secondary border border-foreground rounded-[10px] text-center">
+            <h4 className="font-display font-medium text-[16px] text-foreground tracking-tight mb-4">Saved Successfully</h4>
             <a 
               href={resultUrl}
               download={file.name.replace('.pdf', '-organized.pdf')}
-              className="w-full py-2.5 px-4 rounded-lg font-semibold flex items-center justify-center bg-green-600 hover:bg-green-700 text-white shadow-md transition-all"
+              className="w-full py-3.5 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover text-primary-foreground transition-colors"
             >
-              <Download size={18} className="mr-2" />
+              <Download size={18} strokeWidth={2} className="mr-2" />
               Download
             </a>
           </div>
         )}
       </div>
 
-      <div className="p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 space-y-3">
+      <div className="p-8 bg-secondary/30 border-t border-border space-y-3">
         <button 
           onClick={handleSave}
           disabled={processing || !!resultUrl}
-          className="w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white shadow-md transition-all"
+          className="w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground transition-colors"
         >
           {processing ? (
-            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Saving...</>
+            <><Loader2 className="w-5 h-5 mr-2 animate-spin" strokeWidth={2} /> Saving...</>
           ) : (
             'Save Organized PDF'
           )}
         </button>
         <button 
           onClick={handleReset}
-          className="w-full py-3.5 px-4 rounded-xl font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+          className="w-full py-3.5 px-4 rounded-[8px] font-display font-medium text-[14px] text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           Close Document
         </button>
@@ -322,7 +324,7 @@ export default function OrganizePdf() {
         description={file.name}
         sidebar={sidebar}
       >
-        <div className="flex-1 h-full overflow-y-auto pr-2 pb-20">
+        <div className="flex-1 h-full overflow-y-auto pr-2 pb-20 pt-4 max-w-5xl mx-auto w-full">
           <DndContext 
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -332,7 +334,7 @@ export default function OrganizePdf() {
               items={pages.map(p => p.id)}
               strategy={rectSortingStrategy}
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
                 {pages.map((page) => (
                   <SortablePageItem 
                     key={page.id} 
@@ -351,23 +353,23 @@ export default function OrganizePdf() {
 
       {/* Preview Modal */}
       {previewPage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-12">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-5xl h-full flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
-              <h3 className="font-semibold text-lg">Page {previewPage.originalIndex + 1} Preview</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/10 backdrop-blur-sm p-4 md:p-12">
+          <div className="bg-background rounded-[12px] border border-border shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-full max-w-5xl h-full flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-card">
+              <h3 className="font-display font-medium text-[18px] text-foreground">Page {previewPage.originalIndex + 1} Preview</h3>
               <button 
                 onClick={() => setPreviewPage(null)}
-                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500 transition-colors"
+                className="p-2 hover:bg-secondary rounded-[6px] text-muted-foreground hover:text-foreground transition-colors"
               >
-                <X size={20} />
+                <X size={20} strokeWidth={1.5} />
               </button>
             </div>
-            <div className="flex-1 overflow-hidden p-6 bg-slate-50 dark:bg-slate-950">
+            <div className="flex-1 overflow-hidden p-8 bg-secondary flex items-center justify-center">
               <PdfPreview 
                 pdf={pdf} 
                 pageNumber={previewPage.originalIndex + 1} 
                 rotation={previewPage.rotation}
-                className="shadow-md"
+                className="shadow-[0_8px_30px_rgba(0,0,0,0.06)] max-h-full"
               />
             </div>
           </div>

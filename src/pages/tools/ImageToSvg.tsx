@@ -104,41 +104,52 @@ export default function ImageToSvg() {
 
   return (
     <>
-
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        <div className="flex-1 p-6 flex flex-col overflow-y-auto">
+      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-background">
+        <div className="flex-1 p-8 md:p-12 flex flex-col overflow-y-auto">
           {!file ? (
-            <div 
-              className={cn(
-                "flex-1 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-8 transition-all duration-300 transform",
-                isDragging 
-                  ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 scale-[0.99] shadow-inner" 
-                  : "border-slate-300 dark:border-slate-700 hover:bg-slate-100/50 dark:hover:bg-slate-800/30"
-              )}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <div className="bg-white dark:bg-slate-800 p-4 rounded-full shadow-sm mb-4 transition-transform group-hover:scale-105">
-                <UploadCloud size={32} className="text-blue-500" />
+            <div className="w-full max-w-[1200px] mx-auto h-full flex flex-col">
+              <div className="mb-8 flex items-center gap-4">
+                <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+                  <UploadCloud size={28} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">Image to SVG</h2>
+                  <p className="text-[15px] font-light text-muted-foreground">Convert raster images to vector paths.</p>
+                </div>
               </div>
-              <h2 className="text-xl font-semibold mb-2">Drag & drop an image</h2>
-              <p className="text-slate-500 mb-6">Supports PNG, JPG up to 10MB</p>
               
-              <label className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium cursor-pointer transition-colors shadow-sm hover:shadow-md">
-                Browse Files
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  accept="image/png, image/jpeg, image/jpg" 
-                  onChange={handleFileChange}
-                />
-              </label>
+              <div 
+                className={cn(
+                  "flex-1 border border-dashed rounded-[12px] flex flex-col items-center justify-center p-8 transition-all duration-150 transform",
+                  isDragging 
+                    ? "border-primary bg-primary/5 scale-[0.99] shadow-inner" 
+                    : "border-border hover:border-foreground bg-card"
+                )}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <div className="bg-secondary p-4 rounded-full mb-4">
+                  <UploadCloud size={32} strokeWidth={1.5} className="text-foreground" />
+                </div>
+                <h2 className="text-xl font-display font-medium mb-2 text-foreground">Drag & drop an image</h2>
+                <p className="text-[14px] font-light text-muted-foreground mb-6">Supports PNG, JPG up to 10MB</p>
+                
+                <label className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 rounded-[8px] font-display font-semibold cursor-pointer transition-colors inline-block text-[14px]">
+                  Browse Files
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/png, image/jpeg, image/jpg" 
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col lg:flex-row gap-6">
-              <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-                <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 font-medium text-sm flex justify-between items-center">
+            <div className="flex-1 flex flex-col lg:flex-row gap-6 max-w-[1400px] mx-auto w-full">
+              <div className="flex-1 flex flex-col bg-card rounded-[10px] border border-border overflow-hidden">
+                <div className="px-5 py-4 border-b border-border bg-secondary font-display font-medium text-[14px] flex justify-between items-center text-foreground">
                   <span>Original Image</span>
                   <button 
                     onClick={() => {
@@ -146,55 +157,54 @@ export default function ImageToSvg() {
                       setPreviewUrl(null);
                       setSvgUrl(null);
                     }}
-                    className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-xs px-2 py-1 transition-colors"
+                    className="text-muted-foreground hover:text-foreground text-[12px] uppercase tracking-widest px-2 py-1 transition-colors"
                   >
                     Clear
                   </button>
                 </div>
-                <div className="flex-1 bg-slate-100 dark:bg-slate-800/50 p-4 flex items-center justify-center relative min-h-[300px]">
-                  <div className="absolute inset-0 opacity-10 dark:opacity-5" 
+                <div className="flex-1 bg-secondary/30 p-6 flex items-center justify-center relative min-h-[300px]">
+                  <div className="absolute inset-0 opacity-[0.03]" 
                        style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
                   {previewUrl && (
                     <img 
                       src={previewUrl} 
                       alt="Original" 
-                      className="max-w-full max-h-full object-contain relative z-10 shadow-sm rounded-sm"
+                      className="max-w-full max-h-full object-contain relative z-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-border rounded-[4px]"
                     />
                   )}
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-                <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 font-medium text-sm flex justify-between items-center">
+              <div className="flex-1 flex flex-col bg-card rounded-[10px] border border-border overflow-hidden">
+                <div className="px-5 py-4 border-b border-border bg-secondary font-display font-medium text-[14px] flex justify-between items-center text-foreground">
                   <span>Vector Result</span>
                   {svgUrl && (
-                    <span className="text-green-600 dark:text-green-400 text-xs font-semibold px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-md">
+                    <span className="text-primary text-[10px] font-bold tracking-widest uppercase border border-border px-2 py-1 rounded bg-background">
                       Ready
                     </span>
                   )}
                 </div>
-                <div className="flex-1 bg-slate-100 dark:bg-slate-800/50 p-4 flex items-center justify-center relative min-h-[300px] overflow-hidden group">
-                  <div className="absolute inset-0 opacity-10 dark:opacity-5" 
+                <div className="flex-1 bg-secondary/30 p-6 flex items-center justify-center relative min-h-[300px] overflow-hidden group">
+                  <div className="absolute inset-0 opacity-[0.03]" 
                        style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
                   
                   {isProcessing ? (
-                    <div className="flex flex-col items-center justify-center text-slate-500 relative z-10 bg-white/80 dark:bg-slate-900/80 p-6 rounded-xl shadow-sm backdrop-blur-sm">
-                      <Loader2 className="w-8 h-8 animate-spin mb-4 text-blue-500" />
-                      <p className="font-medium animate-pulse">Vectorizing image...</p>
+                    <div className="flex flex-col items-center justify-center text-foreground relative z-10 bg-card border border-border p-8 rounded-[12px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+                      <Loader2 className="w-10 h-10 animate-spin mb-4 text-primary" strokeWidth={1.5} />
+                      <p className="font-display font-medium text-[15px]">Vectorizing image...</p>
                     </div>
                   ) : svgUrl ? (
                     <div className="relative z-10 w-full h-full flex items-center justify-center cursor-crosshair">
-                       {/* SVG preview via Blob Object URL prevents script execution */}
                       <img 
                         src={svgUrl} 
                         alt="Vectorized SVG" 
-                        className="max-w-full max-h-full object-contain shadow-sm rounded-sm transition-transform duration-300 group-hover:scale-105"
+                        className="max-w-full max-h-full object-contain shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[4px] transition-transform duration-300 group-hover:scale-[1.02]"
                       />
                     </div>
                   ) : (
-                    <div className="text-slate-400 relative z-10 text-center px-4 bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl shadow-sm border border-slate-200/50 dark:border-slate-800/50">
-                      <Settings className="w-8 h-8 mx-auto mb-3 opacity-30 text-blue-500" />
-                      <p className="text-sm">Adjust settings and click Convert</p>
+                    <div className="text-muted-foreground relative z-10 text-center px-4 bg-card p-8 rounded-[12px] border border-border shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                      <Settings className="w-8 h-8 mx-auto mb-4 text-border" strokeWidth={1.5} />
+                      <p className="text-[14px] font-light">Adjust settings and click Convert</p>
                     </div>
                   )}
                 </div>
@@ -204,23 +214,23 @@ export default function ImageToSvg() {
         </div>
 
         {file && (
-          <aside className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-y-auto shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
-            <div className="p-6">
-              <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-slate-800 dark:text-slate-200">
-                <Settings size={18} className="text-slate-500" />
+          <aside className="w-full lg:w-[340px] border-t lg:border-t-0 lg:border-l border-border bg-card flex flex-col overflow-y-auto shrink-0 z-20">
+            <div className="p-8">
+              <h3 className="font-display font-medium text-[16px] mb-8 flex items-center gap-2 text-foreground tracking-tight">
+                <Settings size={18} className="text-muted-foreground" strokeWidth={1.5} />
                 Settings
               </h3>
 
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Color Mode</label>
-                  <div className="flex flex-col gap-2">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <label className="text-[14px] font-display font-medium text-foreground">Color Mode</label>
+                  <div className="flex flex-col gap-3">
                     {(['color', 'grayscale', 'bw'] as const).map(m => (
                       <label key={m} className={cn(
-                        "flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-200",
+                        "flex items-center gap-3 p-4 rounded-[8px] border cursor-pointer transition-all duration-150",
                         mode === m 
-                          ? "border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm" 
-                          : "border-slate-200 dark:border-slate-800 hover:border-slate-300 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 text-slate-600 dark:text-slate-400"
+                          ? "border-foreground bg-secondary text-foreground" 
+                          : "border-border hover:border-muted-foreground text-muted-foreground"
                       )}>
                         <input 
                           type="radio" 
@@ -228,18 +238,18 @@ export default function ImageToSvg() {
                           value={m} 
                           checked={mode === m} 
                           onChange={() => setMode(m)}
-                          className="text-blue-600 focus:ring-blue-500"
+                          className="text-foreground focus:ring-0 accent-foreground w-4 h-4"
                         />
-                        <span className="capitalize font-medium">{m === 'bw' ? 'Black & White' : m}</span>
+                        <span className="capitalize font-display font-medium text-[14px]">{m === 'bw' ? 'Black & White' : m}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+                <div className="space-y-4 pt-6 border-t border-border">
                   <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Level of Detail</label>
-                    <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded capitalize">{detail}</span>
+                    <label className="text-[14px] font-display font-medium text-foreground">Level of Detail</label>
+                    <span className="text-[10px] font-display font-bold uppercase tracking-widest text-background bg-foreground px-2 py-1 rounded-[4px]">{detail}</span>
                   </div>
                   <input 
                     type="range" 
@@ -249,19 +259,19 @@ export default function ImageToSvg() {
                       const val = parseInt(e.target.value);
                       setDetail(val === 0 ? 'low' : val === 1 ? 'medium' : 'high');
                     }}
-                    className="w-full accent-blue-600 hover:accent-blue-700 transition-all"
+                    className="w-full accent-foreground cursor-ew-resize"
                   />
-                  <div className="flex justify-between text-xs text-slate-400 px-1 font-medium">
+                  <div className="flex justify-between text-[11px] font-display font-medium uppercase tracking-widest text-muted-foreground">
                     <span>Low</span>
                     <span>High</span>
                   </div>
                 </div>
 
                 {mode === 'color' && (
-                  <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+                  <div className="space-y-4 pt-6 border-t border-border">
                     <div className="flex justify-between items-center">
-                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Colors</label>
-                      <span className="text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <label className="text-[14px] font-display font-medium text-foreground">Colors</label>
+                      <span className="text-[12px] font-display font-bold bg-secondary px-2 py-1 rounded-[4px] text-foreground border border-border">
                         {colors}
                       </span>
                     </div>
@@ -270,9 +280,9 @@ export default function ImageToSvg() {
                       min="2" max="32" step="1" 
                       value={colors}
                       onChange={(e) => setColors(parseInt(e.target.value))}
-                      className="w-full accent-blue-600 hover:accent-blue-700 transition-all"
+                      className="w-full accent-foreground cursor-ew-resize"
                     />
-                    <div className="flex justify-between text-xs text-slate-400 px-1 font-medium">
+                    <div className="flex justify-between text-[11px] font-display font-medium uppercase tracking-widest text-muted-foreground">
                       <span>2</span>
                       <span>32</span>
                     </div>
@@ -281,20 +291,20 @@ export default function ImageToSvg() {
               </div>
             </div>
 
-            <div className="mt-auto p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="mt-auto p-8 bg-secondary/30 border-t border-border space-y-3">
               <button 
                 onClick={handleConvert}
                 disabled={isProcessing}
                 className={cn(
-                  "w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center transition-all duration-200",
+                  "w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center transition-colors",
                   isProcessing 
-                    ? "bg-blue-400 cursor-not-allowed text-white shadow-inner" 
-                    : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white shadow-md hover:shadow-lg"
+                    ? "bg-secondary text-muted-foreground cursor-not-allowed border border-border" 
+                    : "bg-primary hover:bg-primary-hover text-primary-foreground"
                 )}
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" strokeWidth={2} />
                     Processing...
                   </>
                 ) : (
@@ -306,9 +316,9 @@ export default function ImageToSvg() {
                 <a 
                   href={svgUrl}
                   download={file.name.replace(/\.[^/.]+$/, "") + ".svg"}
-                  className="w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center bg-white dark:bg-slate-800 border-2 border-green-500 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 active:scale-[0.98] transition-all duration-200 shadow-sm"
+                  className="w-full py-3.5 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-card border border-primary text-primary hover:bg-primary/5 transition-colors"
                 >
-                  <Download className="w-5 h-5 mr-2" />
+                  <Download className="w-4 h-4 mr-2" strokeWidth={2.5} />
                   Download SVG
                 </a>
               )}

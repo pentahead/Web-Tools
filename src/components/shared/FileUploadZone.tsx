@@ -107,24 +107,24 @@ export default function FileUploadZone({
   return (
     <div 
       className={cn(
-        "flex-1 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-8 transition-all duration-300 transform bg-white dark:bg-slate-900 min-h-[300px]",
+        "flex-1 border border-dashed rounded-xl flex flex-col items-center justify-center p-8 transition-all duration-150 transform min-h-[300px]",
         isDragging 
-          ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 scale-[0.99] shadow-inner" 
-          : "border-slate-300 dark:border-slate-700 hover:bg-slate-100/50 dark:hover:bg-slate-800/30"
+          ? "border-primary bg-primary/5 scale-[0.99] shadow-inner" 
+          : "border-border bg-card hover:border-foreground"
       )}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-full shadow-sm mb-4 transition-transform group-hover:scale-105">
-        <UploadCloud size={32} className="text-blue-500" />
+      <div className="bg-secondary p-4 rounded-full mb-4">
+        <UploadCloud size={32} className="text-foreground" strokeWidth={1.5} />
       </div>
-      <h2 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200">{title}</h2>
-      <p className="text-slate-500 mb-6">
+      <h2 className="text-xl font-display font-medium mb-2 text-foreground">{title}</h2>
+      <p className="text-muted-foreground text-sm font-light mb-6">
         {subtitle || `Max ${maxSizeMB}MB`}
       </p>
       
-      <label className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium cursor-pointer transition-colors shadow-sm hover:shadow-md inline-block">
+      <label className="bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 rounded-lg font-display font-semibold cursor-pointer transition-colors inline-block text-[14px]">
         Choose File{multiple ? 's' : ''}
         <input 
           type="file" 

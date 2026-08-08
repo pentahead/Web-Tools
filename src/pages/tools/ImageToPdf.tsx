@@ -35,30 +35,35 @@ function SortableImageItem({ item, onRemove }: { item: ImageItem; onRemove: (id:
     setNodeRef,
     transform,
     transition,
+    isDragging
   } = useSortable({ id: item.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 10 : 1,
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 rounded-xl shadow-sm">
-      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 p-1">
-        <GripVertical size={20} />
+    <div ref={setNodeRef} style={style} className={cn(
+      "flex items-center gap-4 bg-card border p-3 rounded-[8px] transition-colors",
+      isDragging ? "border-foreground shadow-[0_8px_30px_rgba(0,0,0,0.12)] scale-[1.02]" : "border-border hover:border-muted-foreground"
+    )}>
+      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1">
+        <GripVertical size={20} strokeWidth={1.5} />
       </div>
-      <div className="w-12 h-12 rounded bg-slate-100 overflow-hidden flex-shrink-0">
+      <div className="w-12 h-12 rounded-[4px] bg-secondary overflow-hidden flex-shrink-0 border border-border">
         <img src={item.previewUrl} alt={item.file.name} className="w-full h-full object-cover" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{item.file.name}</p>
-        <p className="text-xs text-slate-500">{(item.file.size / 1024 / 1024).toFixed(2)} MB</p>
+        <p className="font-display font-medium text-[15px] text-foreground truncate tracking-tight">{item.file.name}</p>
+        <p className="text-[13px] font-light text-muted-foreground">{(item.file.size / 1024 / 1024).toFixed(2)} MB</p>
       </div>
       <button 
         onClick={() => onRemove(item.id)}
-        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+        className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-[6px] transition-colors"
       >
-        <X size={18} />
+        <X size={18} strokeWidth={1.5} />
       </button>
     </div>
   );
@@ -162,37 +167,39 @@ export default function ImageToPdf() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-background">
       {/* Main Content Area */}
-      <div className="flex-1 p-6 flex flex-col overflow-y-auto">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white">
-            <FileText size={24} />
+      <div className="flex-1 p-8 md:p-12 flex flex-col overflow-y-auto">
+        <div className="mb-8 flex items-center gap-4 max-w-[1200px] mx-auto w-full">
+          <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+            <FileText size={28} strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Image to PDF</h2>
-            <p className="text-sm text-slate-500">Convert your images into a PDF document.</p>
+            <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">Image to PDF</h2>
+            <p className="text-[15px] font-light text-muted-foreground">Convert your images into a PDF document.</p>
           </div>
         </div>
 
         {items.length === 0 ? (
-          <FileUploadZone 
-            accept="image/png, image/jpeg, image/jpg, image/webp"
-            maxSizeMB={10}
-            multiple={true}
-            onFilesSelected={processFiles}
-            title="Drop images here"
-            subtitle="Supports PNG, JPG, JPEG up to 10MB"
-          />
+          <div className="max-w-[1200px] mx-auto w-full flex-1 flex flex-col">
+            <FileUploadZone 
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              maxSizeMB={10}
+              multiple={true}
+              onFilesSelected={processFiles}
+              title="Drop images here"
+              subtitle="Supports PNG, JPG, JPEG up to 10MB"
+            />
+          </div>
         ) : (
-          <div className="flex flex-col flex-1">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-200">
+          <div className="flex flex-col flex-1 max-w-[1200px] mx-auto w-full">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-display font-medium text-[16px] text-foreground">
                 Images ({items.length}/20)
               </h3>
-              <label className="text-blue-600 hover:text-blue-700 dark:text-blue-400 text-sm font-medium cursor-pointer flex items-center gap-1 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-md transition-colors">
-                <Plus size={16} />
-                Add More Images
+              <label className="text-foreground border border-border hover:border-foreground text-[13px] font-display font-medium cursor-pointer flex items-center gap-2 bg-card hover:bg-secondary px-4 py-2 rounded-[6px] transition-colors">
+                <Plus size={16} strokeWidth={2} />
+                Add More
                 <input 
                   type="file" 
                   className="hidden" 
@@ -213,7 +220,7 @@ export default function ImageToPdf() {
                   items={items.map(i => i.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {items.map(item => (
                       <SortableImageItem key={item.id} item={item} onRemove={handleRemove} />
                     ))}
@@ -223,24 +230,24 @@ export default function ImageToPdf() {
             </div>
 
             {isProcessing && (
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6 flex flex-col items-center">
-                <Loader2 className="w-8 h-8 animate-spin mb-4 text-blue-500" />
-                <p className="font-medium text-slate-700 dark:text-slate-300">Creating PDF...</p>
-                <div className="w-full max-w-md bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 mt-4 overflow-hidden">
-                  <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+              <div className="bg-card p-10 rounded-[12px] border border-border flex flex-col items-center mb-6">
+                <Loader2 className="w-10 h-10 animate-spin mb-4 text-primary" strokeWidth={1.5} />
+                <p className="font-display font-medium text-[16px] text-foreground mb-4">Creating PDF...</p>
+                <div className="w-full max-w-md bg-secondary rounded-full h-2 mt-2 overflow-hidden">
+                  <div className="bg-primary h-2 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
                 </div>
               </div>
             )}
 
             {pdfUrl && !isProcessing && (
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-200 dark:border-green-800/30 shadow-sm flex flex-col items-center mb-6">
-                <p className="font-medium text-green-800 dark:text-green-300 mb-4">PDF is ready!</p>
+              <div className="bg-secondary p-10 rounded-[12px] border border-foreground flex flex-col items-center mb-6">
+                <p className="font-display font-medium text-[20px] text-foreground mb-6">PDF is ready!</p>
                 <a 
                   href={pdfUrl}
                   download="images.pdf"
-                  className="w-full max-w-md py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors"
+                  className="w-full max-w-sm py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover text-primary-foreground transition-colors"
                 >
-                  <Download className="w-5 h-5 mr-2" />
+                  <Download className="w-5 h-5 mr-2" strokeWidth={2} />
                   Download PDF
                 </a>
               </div>
@@ -251,21 +258,21 @@ export default function ImageToPdf() {
 
       {/* Settings Sidebar */}
       {items.length > 0 && (
-        <aside className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-y-auto shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
-          <div className="p-6 flex-1">
-            <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-slate-800 dark:text-slate-200">
-              <Settings size={18} className="text-slate-500" />
+        <aside className="w-full lg:w-[340px] border-t lg:border-t-0 lg:border-l border-border bg-card flex flex-col overflow-y-auto shrink-0 z-20">
+          <div className="p-8 flex-1">
+            <h3 className="font-display font-medium text-[16px] mb-8 flex items-center gap-2 text-foreground tracking-tight">
+              <Settings size={18} className="text-muted-foreground" strokeWidth={1.5} />
               PDF Settings
             </h3>
 
             <div className="space-y-6">
               {/* Page Size */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Page Size</label>
+                <label className="text-[13px] font-display font-medium text-muted-foreground uppercase tracking-widest">Page Size</label>
                 <select 
                   value={pageSize}
                   onChange={(e) => { setPageSize(e.target.value as PageSize); setPdfUrl(null); }}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3.5 bg-background border border-border rounded-[8px] text-[15px] font-medium text-foreground outline-none focus:border-foreground transition-colors"
                 >
                   <option value="A4">A4</option>
                   <option value="A5">A5</option>
@@ -276,11 +283,11 @@ export default function ImageToPdf() {
 
               {/* Orientation */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Orientation</label>
+                <label className="text-[13px] font-display font-medium text-muted-foreground uppercase tracking-widest">Orientation</label>
                 <select 
                   value={orientation}
                   onChange={(e) => { setOrientation(e.target.value as Orientation); setPdfUrl(null); }}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3.5 bg-background border border-border rounded-[8px] text-[15px] font-medium text-foreground outline-none focus:border-foreground transition-colors"
                 >
                   <option value="Auto">Auto</option>
                   <option value="Portrait">Portrait</option>
@@ -290,11 +297,11 @@ export default function ImageToPdf() {
 
               {/* Margin */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Margin</label>
+                <label className="text-[13px] font-display font-medium text-muted-foreground uppercase tracking-widest">Margin</label>
                 <select 
                   value={margin}
                   onChange={(e) => { setMargin(e.target.value as Margin); setPdfUrl(null); }}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3.5 bg-background border border-border rounded-[8px] text-[15px] font-medium text-foreground outline-none focus:border-foreground transition-colors"
                 >
                   <option value="None">None</option>
                   <option value="Small">Small</option>
@@ -305,11 +312,11 @@ export default function ImageToPdf() {
 
               {/* Image Fit */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Image Fit</label>
+                <label className="text-[13px] font-display font-medium text-muted-foreground uppercase tracking-widest">Image Fit</label>
                 <select 
                   value={imageFit}
                   onChange={(e) => { setImageFit(e.target.value as ImageFit); setPdfUrl(null); }}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3.5 bg-background border border-border rounded-[8px] text-[15px] font-medium text-foreground outline-none focus:border-foreground transition-colors"
                 >
                   <option value="Fit">Fit (contain)</option>
                   <option value="Fill">Fill (cover)</option>
@@ -319,15 +326,15 @@ export default function ImageToPdf() {
             </div>
           </div>
 
-          <div className="mt-auto p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+          <div className="mt-auto p-8 bg-secondary/30 border-t border-border">
             <button 
               onClick={handleGeneratePdf}
               disabled={isProcessing}
               className={cn(
-                "w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center transition-all duration-200",
+                "w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center transition-colors",
                 isProcessing 
-                  ? "bg-blue-400 cursor-not-allowed text-white shadow-inner" 
-                  : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white shadow-md hover:shadow-lg"
+                  ? "bg-secondary text-muted-foreground border border-border cursor-not-allowed" 
+                  : "bg-primary hover:bg-primary-hover text-primary-foreground"
               )}
             >
               {isProcessing ? 'Generating...' : 'Create PDF'}

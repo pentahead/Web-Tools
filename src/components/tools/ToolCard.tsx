@@ -8,35 +8,40 @@ export default function ToolCard({ tool }: { tool: Tool }) {
 
   const content = (
     <>
-      <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg w-fit mb-4">
-        <Icon className={cn("w-6 h-6", isAvailable ? "text-blue-600 dark:text-blue-400" : "text-slate-400")} />
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <Icon className={cn("w-6 h-6", isAvailable ? "text-foreground" : "text-muted-foreground")} strokeWidth={1.5} />
+        {!isAvailable && (
+          <span className="font-display text-[9.5px] font-semibold tracking-widest uppercase border border-border rounded px-[6px] py-[3px] text-muted-foreground leading-none">
+            Soon
+          </span>
+        )}
       </div>
       
-      <h3 className={cn("font-semibold text-lg mb-2", !isAvailable && "text-slate-500")}>
+      <h3 className={cn("font-display font-semibold text-[22px] tracking-tight leading-tight mb-2", !isAvailable ? "text-secondary-foreground/60" : "text-foreground")}>
         {tool.name}
       </h3>
       
-      <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 flex-1">
+      <p className="text-[14px] font-light leading-relaxed text-muted-foreground mb-4 flex-1">
         {tool.description}
       </p>
 
       {isAvailable ? (
-        <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm mt-auto group-hover:underline">
-          Open Tool &rarr;
+        <div className="font-display font-medium text-[13px] text-foreground mt-auto">
+          app.penttools.com <span className="text-primary group-hover:underline inline-block ml-1">&rarr;</span>
         </div>
       ) : (
-        <div className="inline-flex items-center bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full mt-auto w-fit">
-          Coming Soon
+        <div className="font-display font-medium text-[13px] text-muted-foreground mt-auto">
+          In development
         </div>
       )}
     </>
   );
 
   const cardClasses = cn(
-    "flex flex-col p-6 rounded-xl border bg-white dark:bg-slate-900 transition-all duration-300 h-full",
+    "flex flex-col p-7 rounded-[11px] border bg-card transition-all duration-150 h-full text-left",
     isAvailable 
-      ? "border-slate-200 dark:border-slate-800 hover:border-blue-300 hover:shadow-md group cursor-pointer" 
-      : "border-slate-200/50 dark:border-slate-800/50 opacity-80 grayscale-[0.5]"
+      ? "border-border hover:border-foreground hover:-translate-y-[2px] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] group cursor-pointer" 
+      : "border-transparent bg-secondary opacity-80"
   );
 
   if (isAvailable && tool.href) {

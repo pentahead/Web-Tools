@@ -1,24 +1,33 @@
 import { Link } from 'react-router-dom';
+import { Layers } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 py-12 mt-auto">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex flex-col items-center md:items-start">
-          <h2 className="font-bold text-lg text-slate-800 dark:text-slate-200 mb-2">Vectorize</h2>
-          <p className="text-slate-500 text-sm text-center md:text-left">
+    <footer className="border-t border-border bg-background py-16 mt-auto">
+      <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <div className="flex flex-col items-start">
+          <div className="flex items-center gap-2 mb-3">
+            <Layers size={18} className="text-primary" />
+            <h2 className="font-display font-semibold text-[15px] text-foreground tracking-tight">pentTools</h2>
+          </div>
+          <p className="text-muted-foreground text-sm font-light">
             Simple browser-based file tools.
           </p>
         </div>
-        
-        <div className="flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
-          <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tools</Link>
-          <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy</a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">GitHub</a>
+
+        <div className="flex gap-8 text-[13px] font-medium text-muted-foreground font-display">
+          <Link to="/" className="hover:text-foreground transition-colors">Tools</Link>
+          <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
+          <a href="https://github.com/pentahead" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-6 mt-8 pt-8 border-t border-slate-200/50 dark:border-slate-800/50 text-center text-xs text-slate-400">
-        &copy; {new Date().getFullYear()} Vectorize. Private by design. Your files are processed locally in your browser.
+      <div className="max-w-[1200px] mx-auto px-6 mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="text-[12px] text-muted-foreground/80 font-light">
+          &copy; {new Date().getFullYear()} pentTools. Private by design.
+        </div>
+        <div className="text-[12px] text-muted-foreground/80 font-light">
+          Your files are processed locally in your browser.
+        </div>
       </div>
     </footer>
   );

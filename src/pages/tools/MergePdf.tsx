@@ -54,28 +54,28 @@ function SortableFileItem({
       ref={setNodeRef} 
       style={style} 
       className={cn(
-        "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 rounded-xl shadow-sm flex items-center justify-between mb-3 group",
-        isDragging ? "opacity-50 ring-2 ring-blue-500 scale-[1.02]" : ""
+        "bg-card border p-4 rounded-[8px] flex items-center justify-between mb-3 group transition-colors",
+        isDragging ? "opacity-90 border-foreground shadow-[0_8px_30px_rgba(0,0,0,0.12)] scale-[1.02]" : "border-border hover:border-foreground"
       )}
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div 
-          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab active:cursor-grabbing p-1"
+          className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing p-1"
           {...attributes} 
           {...listeners}
         >
-          <GripVertical size={20} />
+          <GripVertical size={20} strokeWidth={1.5} />
         </div>
         
-        <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-bold rounded-lg w-10 h-10 flex items-center justify-center shrink-0">
+        <div className="bg-secondary text-foreground font-display font-bold rounded-[6px] w-10 h-10 flex items-center justify-center shrink-0">
           {index + 1}
         </div>
         
         <div className="min-w-0 pr-4">
-          <p className="font-medium text-slate-800 dark:text-slate-200 truncate" title={file.name}>
+          <p className="font-display font-medium text-[15px] text-foreground truncate tracking-tight" title={file.name}>
             {file.name}
           </p>
-          <p className="text-sm text-slate-500">
+          <p className="text-[13px] font-light text-muted-foreground">
             {(file.size / 1024 / 1024).toFixed(2)} MB
           </p>
         </div>
@@ -83,10 +83,10 @@ function SortableFileItem({
       
       <button 
         onClick={() => onDelete(file.name)}
-        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors shrink-0"
+        className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-[6px] transition-colors shrink-0"
         title="Remove File"
       >
-        <Trash2 size={20} />
+        <Trash2 size={18} strokeWidth={1.5} />
       </button>
     </div>
   );
@@ -171,66 +171,68 @@ export default function MergePdf() {
 
   if (files.length === 0) {
     return (
-      <div className="flex-1 flex flex-col p-6 bg-slate-50 dark:bg-slate-950 overflow-y-auto">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white">
-            <Layers size={24} />
+      <div className="flex-1 flex flex-col p-8 md:p-12 bg-background overflow-y-auto">
+        <div className="mb-8 flex items-center gap-4 max-w-[1200px] mx-auto w-full">
+          <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+            <Layers size={28} strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Merge PDF</h2>
-            <p className="text-sm text-slate-500">Combine multiple PDFs into one document in the order you prefer.</p>
+            <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">Merge PDF</h2>
+            <p className="text-[15px] font-light text-muted-foreground">Combine multiple PDFs into one document in the order you prefer.</p>
           </div>
         </div>
         
-        <FileUploadZone 
-          accept="application/pdf,.pdf"
-          maxSizeMB={50}
-          multiple={true}
-          onFilesSelected={handleFilesSelected}
-          title="Drop PDFs here"
-          subtitle="Select up to 20 files"
-        />
+        <div className="max-w-[1200px] mx-auto w-full flex-1 flex flex-col">
+          <FileUploadZone 
+            accept="application/pdf,.pdf"
+            maxSizeMB={50}
+            multiple={true}
+            onFilesSelected={handleFilesSelected}
+            title="Drop PDFs here"
+            subtitle="Select up to 20 files"
+          />
+        </div>
       </div>
     );
   }
 
   const sidebar = (
-    <div className="flex flex-col h-full">
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="font-semibold text-lg mb-6 text-slate-800 dark:text-slate-200">
+    <div className="flex flex-col h-full bg-card">
+      <div className="p-8 flex-1 flex flex-col">
+        <h3 className="font-display font-medium text-[16px] mb-8 text-foreground tracking-tight">
           Merge Status
         </h3>
         
-        <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 space-y-3 mb-6">
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-500">Total Files</span>
-            <span className="font-medium text-slate-700 dark:text-slate-300">{files.length}</span>
+        <div className="bg-secondary rounded-[10px] p-5 border border-border space-y-4 mb-6">
+          <div className="flex justify-between items-center text-[14px]">
+            <span className="font-light text-muted-foreground">Total Files</span>
+            <span className="font-medium text-foreground">{files.length}</span>
           </div>
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-500">Total Size</span>
-            <span className="font-medium text-slate-700 dark:text-slate-300">
+          <div className="flex justify-between items-center text-[14px]">
+            <span className="font-light text-muted-foreground">Total Size</span>
+            <span className="font-medium text-foreground">
               {(files.reduce((acc, file) => acc + file.size, 0) / 1024 / 1024).toFixed(2)} MB
             </span>
           </div>
         </div>
 
         {resultUrl && (
-          <div className="mt-4 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-xl text-center">
-            <h4 className="font-medium text-green-800 dark:text-green-300 mb-2">Merge Complete</h4>
-            <p className="text-sm text-green-700/80 dark:text-green-400/80 mb-4">
+          <div className="mt-4 p-6 bg-secondary border border-foreground rounded-[10px] text-center">
+            <h4 className="font-display font-medium text-[16px] text-foreground tracking-tight mb-2">Merge Complete</h4>
+            <p className="text-[13px] font-light text-muted-foreground mb-5">
               Result size: {(resultSize / 1024 / 1024).toFixed(2)} MB
             </p>
             <a 
               href={resultUrl}
               download="merged-document.pdf"
-              className="w-full py-2.5 px-4 rounded-lg font-semibold flex items-center justify-center bg-green-600 hover:bg-green-700 text-white shadow-md transition-all mb-3"
+              className="w-full py-3.5 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover text-primary-foreground transition-colors mb-3"
             >
-              <Download size={18} className="mr-2" />
+              <Download size={18} strokeWidth={2} className="mr-2" />
               Download
             </a>
             <button 
               onClick={handleReset}
-              className="w-full py-2 text-sm font-medium text-green-700 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 underline"
+              className="w-full py-2 text-[13px] font-medium text-muted-foreground hover:text-foreground underline transition-colors"
             >
               Merge More Files
             </button>
@@ -238,14 +240,14 @@ export default function MergePdf() {
         )}
       </div>
 
-      <div className="p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 space-y-3">
+      <div className="p-8 bg-secondary/30 border-t border-border space-y-3">
         <button 
           onClick={handleMerge}
           disabled={processing || !!resultUrl || files.length < 2}
-          className="w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white shadow-md transition-all"
+          className="w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground transition-colors"
         >
           {processing ? (
-            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Merging...</>
+            <><Loader2 className="w-5 h-5 mr-2 animate-spin" strokeWidth={2} /> Merging...</>
           ) : (
             'Merge PDFs'
           )}
@@ -283,7 +285,7 @@ export default function MergePdf() {
           </SortableContext>
         </DndContext>
 
-        <div className="mt-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 relative overflow-hidden transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
+        <div className="mt-4 border border-dashed border-border rounded-[8px] bg-secondary/50 relative overflow-hidden transition-colors hover:border-foreground">
           <input 
             type="file"
             accept="application/pdf,.pdf"
@@ -294,8 +296,8 @@ export default function MergePdf() {
               e.target.value = '';
             }}
           />
-          <div className="py-6 flex items-center justify-center text-slate-500 font-medium">
-            <Plus size={20} className="mr-2" />
+          <div className="py-6 flex items-center justify-center text-[14px] font-display font-medium text-muted-foreground group-hover:text-foreground">
+            <Plus size={18} strokeWidth={2} className="mr-2" />
             Add More Files
           </div>
         </div>

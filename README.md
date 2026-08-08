@@ -1,6 +1,6 @@
-# Vectorize
+# pentTools
 
-Vectorize is a production-quality, client-side web application that converts PNG/JPG/JPEG raster images into SVG vector graphics. The entire conversion process happens securely in the browser using Web Workers to ensure a responsive user experience.
+pentTools is a production-quality, client-side web application that converts PNG/JPG/JPEG raster images into SVG vector graphics. The entire conversion process happens securely in the browser using Web Workers to ensure a responsive user experience.
 
 ## Features
 

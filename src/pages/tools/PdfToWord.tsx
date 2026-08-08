@@ -83,41 +83,43 @@ export default function PdfToWord() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <div className="flex-1 p-6 flex flex-col overflow-y-auto">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white">
-            <FileText size={24} />
+    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-background">
+      <div className="flex-1 p-8 md:p-12 flex flex-col overflow-y-auto">
+        <div className="mb-8 flex items-center gap-4 max-w-[1200px] mx-auto w-full">
+          <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+            <FileText size={28} strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">PDF to Word</h2>
-            <p className="text-sm text-slate-500">Convert PDF files into editable Word documents.</p>
+            <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">PDF to Word</h2>
+            <p className="text-[15px] font-light text-muted-foreground">Convert PDF files into editable Word documents.</p>
           </div>
         </div>
 
         {!file ? (
-          <FileUploadZone 
-            accept="application/pdf,.pdf"
-            maxSizeMB={20}
-            multiple={false}
-            onFilesSelected={handleFilesSelected}
-            title="Drop PDF here"
-            subtitle="PDF • Max 20 MB"
-          />
+          <div className="max-w-[1200px] mx-auto w-full flex-1 flex flex-col">
+            <FileUploadZone 
+              accept="application/pdf,.pdf"
+              maxSizeMB={20}
+              multiple={false}
+              onFilesSelected={handleFilesSelected}
+              title="Drop PDF here"
+              subtitle="PDF • Max 20 MB"
+            />
+          </div>
         ) : (
-          <div className="flex flex-col flex-1 max-w-3xl mx-auto w-full space-y-6">
+          <div className="flex flex-col flex-1 max-w-[1200px] mx-auto w-full space-y-6">
             
             {/* File Info Card */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm flex items-center justify-between">
+            <div className="bg-card border border-border p-5 rounded-[10px] flex items-center justify-between transition-colors">
               <div className="flex items-center gap-4">
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-red-500">
-                  <FileText size={24} />
+                <div className="bg-secondary p-3 rounded-[6px] text-foreground border border-border">
+                  <FileText size={24} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-xs md:max-w-md">
+                  <p className="font-display font-medium text-[16px] text-foreground truncate max-w-xs md:max-w-md">
                     {file.name}
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-[13px] font-light text-muted-foreground mt-1">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
@@ -125,49 +127,49 @@ export default function PdfToWord() {
               <button 
                 onClick={handleRemove}
                 disabled={state === 'processing'}
-                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                className="p-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-[6px] transition-colors disabled:opacity-50"
               >
-                <X size={20} />
+                <X size={20} strokeWidth={1.5} />
               </button>
             </div>
 
             {/* States */}
             {state === 'processing' && (
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center">
-                <Loader2 className="w-10 h-10 animate-spin mb-4 text-blue-500" />
-                <h3 className="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-2">Converting PDF...</h3>
-                <p className="text-slate-500 mb-6">{progressMsg}</p>
-                <div className="w-full max-w-md bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-                  <div className="bg-blue-600 h-full rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }}></div>
+              <div className="bg-card p-10 rounded-[12px] border border-border flex flex-col items-center max-w-xl mx-auto w-full">
+                <Loader2 className="w-10 h-10 animate-spin mb-6 text-primary" strokeWidth={1.5} />
+                <h3 className="font-display font-medium text-[20px] text-foreground mb-2 tracking-tight">Converting PDF...</h3>
+                <p className="text-[14px] font-light text-muted-foreground mb-8">{progressMsg}</p>
+                <div className="w-full bg-secondary rounded-full h-2 overflow-hidden mb-2">
+                  <div className="bg-primary h-2 rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }}></div>
                 </div>
               </div>
             )}
 
             {state === 'completed' && docxUrl && (
-              <div className="bg-green-50 dark:bg-green-900/20 p-8 rounded-xl border border-green-200 dark:border-green-800/30 shadow-sm flex flex-col items-center text-center">
-                <h3 className="font-semibold text-xl text-green-800 dark:text-green-300 mb-2">Conversion complete</h3>
-                <p className="text-green-700/80 dark:text-green-400/80 mb-6 font-medium">{getOutputFilename(file.name)}</p>
+              <div className="bg-secondary p-10 rounded-[12px] border border-foreground flex flex-col items-center text-center max-w-xl mx-auto w-full">
+                <h3 className="font-display font-medium text-[24px] text-foreground mb-3 tracking-tight">Conversion Complete</h3>
+                <p className="text-[15px] font-light text-muted-foreground mb-8">{getOutputFilename(file.name)}</p>
                 <a 
                   href={docxUrl}
                   download={getOutputFilename(file.name)}
-                  className="py-3 px-8 rounded-xl font-semibold flex items-center justify-center bg-green-600 hover:bg-green-700 text-white shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                  className="py-4 px-8 rounded-[8px] font-display font-semibold flex items-center justify-center bg-primary hover:bg-primary-hover text-primary-foreground transition-colors w-full"
                 >
-                  <Download className="w-5 h-5 mr-2" />
+                  <Download className="w-5 h-5 mr-2" strokeWidth={2} />
                   Download Word
                 </a>
               </div>
             )}
 
             {state === 'scanned-pdf' && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-8 rounded-xl border border-amber-200 dark:border-amber-800/30 shadow-sm flex flex-col items-center text-center">
-                <h3 className="font-semibold text-xl text-amber-800 dark:text-amber-300 mb-2">This PDF appears to be scanned.</h3>
-                <p className="text-amber-700/80 dark:text-amber-400/80 mb-6">
+              <div className="bg-card p-10 rounded-[12px] border border-border flex flex-col items-center text-center max-w-xl mx-auto w-full">
+                <h3 className="font-display font-medium text-[20px] text-foreground mb-3 tracking-tight">Scanned PDF Detected</h3>
+                <p className="text-[14px] font-light text-muted-foreground mb-8 leading-relaxed">
                   We couldn't find selectable text in this document.<br/>
                   OCR support is coming soon.
                 </p>
                 <button 
                   onClick={handleRemove}
-                  className="py-2.5 px-6 rounded-lg font-medium bg-amber-200 hover:bg-amber-300 dark:bg-amber-800 dark:hover:bg-amber-700 text-amber-900 dark:text-amber-100 transition-colors"
+                  className="py-3 px-8 rounded-[8px] font-display font-medium bg-secondary text-foreground hover:bg-border transition-colors border border-border"
                 >
                   Choose Another PDF
                 </button>
@@ -175,14 +177,14 @@ export default function PdfToWord() {
             )}
 
             {state === 'error' && (
-              <div className="bg-red-50 dark:bg-red-900/20 p-8 rounded-xl border border-red-200 dark:border-red-800/30 shadow-sm flex flex-col items-center text-center">
-                <h3 className="font-semibold text-xl text-red-800 dark:text-red-300 mb-2">We couldn't convert this PDF.</h3>
-                <p className="text-red-700/80 dark:text-red-400/80 mb-6 max-w-md">
+              <div className="bg-card p-10 rounded-[12px] border border-destructive/30 flex flex-col items-center text-center max-w-xl mx-auto w-full">
+                <h3 className="font-display font-medium text-[20px] text-foreground mb-3 tracking-tight">We couldn't convert this PDF.</h3>
+                <p className="text-[14px] font-light text-muted-foreground mb-8 leading-relaxed">
                   {error || "Please try another file."}
                 </p>
                 <button 
                   onClick={handleRemove}
-                  className="py-2.5 px-6 rounded-lg font-medium bg-red-200 hover:bg-red-300 dark:bg-red-800 dark:hover:bg-red-700 text-red-900 dark:text-red-100 transition-colors"
+                  className="py-3 px-8 rounded-[8px] font-display font-medium bg-secondary text-foreground hover:bg-border transition-colors border border-border"
                 >
                   Choose Another PDF
                 </button>
@@ -195,21 +197,21 @@ export default function PdfToWord() {
 
       {/* Settings Sidebar */}
       {file && (
-        <aside className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-y-auto shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
-          <div className="p-6 flex-1">
-            <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-slate-800 dark:text-slate-200">
-              <Settings size={18} className="text-slate-500" />
+        <aside className="w-full lg:w-[340px] border-t lg:border-t-0 lg:border-l border-border bg-card flex flex-col overflow-y-auto shrink-0 z-20">
+          <div className="p-8 flex-1">
+            <h3 className="font-display font-medium text-[16px] mb-8 flex items-center gap-2 text-foreground tracking-tight">
+              <Settings size={18} className="text-muted-foreground" strokeWidth={1.5} />
               Conversion Options
             </h3>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Text Layout</label>
+                <label className="text-[13px] font-display font-medium text-muted-foreground uppercase tracking-widest">Text Layout</label>
                 <select 
                   value={settings.layout}
                   onChange={(e) => setSettings({ ...settings, layout: e.target.value as 'preserve' | 'plain' })}
                   disabled={state === 'processing'}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="w-full p-3.5 bg-background border border-border rounded-[8px] text-[15px] font-medium text-foreground outline-none focus:border-foreground transition-colors disabled:opacity-50"
                 >
                   <option value="preserve">Preserve basic paragraphs</option>
                   <option value="plain">Plain text</option>
@@ -218,21 +220,21 @@ export default function PdfToWord() {
             </div>
           </div>
 
-          <div className="mt-auto p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+          <div className="mt-auto p-8 bg-secondary/30 border-t border-border">
             <button 
               onClick={handleConvert}
               disabled={state === 'processing'}
               className={cn(
-                "w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center transition-all duration-200",
+                "w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center transition-colors",
                 state === 'processing'
-                  ? "bg-blue-400 cursor-not-allowed text-white shadow-inner" 
-                  : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white shadow-md hover:shadow-lg"
+                  ? "bg-secondary text-muted-foreground cursor-not-allowed border border-border" 
+                  : "bg-primary hover:bg-primary-hover text-primary-foreground"
               )}
             >
               {state === 'processing' ? 'Converting...' : 'Convert to Word'}
             </button>
-            <p className="text-xs text-center text-slate-500 mt-4">
-              Your PDF is processed locally in your browser and is not uploaded to a server.
+            <p className="text-[12px] text-center font-light text-muted-foreground mt-5">
+              Your PDF is processed locally in your browser.
             </p>
           </div>
         </aside>

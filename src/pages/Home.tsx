@@ -21,25 +21,25 @@ export default function Home() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <div className="w-full py-16 md:py-24 px-6 md:px-12">
         
         {/* Hero Section */}
-        <section className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-            Simple tools for your files
+        <section className="mb-20 max-w-2xl">
+          <h1 className="text-[clamp(34px,5vw,56px)] font-light leading-[1.05] tracking-[-0.02em] text-foreground mb-6">
+            Files shouldn't be <em className="not-italic bg-primary text-black px-2 rounded-md font-normal">hard</em>.
           </h1>
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10">
-            Convert, optimize, and work with your files right in your browser.
+          <p className="text-[18px] font-light leading-[1.55] text-muted-foreground mb-10 max-w-[640px]">
+            <b>pentTools</b> runs localized software modules to optimize, convert, and manipulate your files. Private by design, executed directly in your browser.
           </p>
           
-          <div className="relative max-w-xl mx-auto">
+          <div className="relative max-w-lg">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-slate-400" />
+              <Search className="h-[18px] w-[18px] text-muted-foreground" />
             </div>
             <input
               type="text"
-              className="block w-full pl-11 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-base shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all dark:text-white"
-              placeholder="Search tools..."
+              className="block w-full pl-11 pr-4 py-[14px] bg-card border border-border rounded-lg text-[15px] shadow-sm focus:border-foreground focus:ring-0 outline-none transition-colors"
+              placeholder="Search product line..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -47,20 +47,24 @@ export default function Home() {
         </section>
 
         {/* Tools Section */}
-        <section>
+        <section className="border-t border-border pt-16">
+          <span className="font-display text-[11px] font-semibold tracking-[0.1em] uppercase text-muted-foreground block mb-8">
+            Product Line
+          </span>
+
           {filteredTools.length === 0 ? (
-            <div className="text-center py-20">
-              <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">No tools found.</h3>
-              <p className="text-slate-500">Try another search term.</p>
+            <div className="py-12">
+              <h3 className="font-display text-xl font-medium text-foreground mb-2">No active modules found.</h3>
+              <p className="text-[14px] text-muted-foreground">Adjust your search parameters.</p>
             </div>
           ) : (
             <div className="space-y-16">
               {imageTools.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                  <h2 className="font-display text-[24px] font-medium tracking-[-0.01em] text-foreground mb-6">
                     Image Tools
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {imageTools.map(tool => (
                       <ToolCard key={tool.id} tool={tool} />
                     ))}
@@ -69,11 +73,11 @@ export default function Home() {
               )}
               
               {pdfTools.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <div className="pt-8">
+                  <h2 className="font-display text-[24px] font-medium tracking-[-0.01em] text-foreground mb-6">
                     PDF Tools
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {pdfTools.map(tool => (
                       <ToolCard key={tool.id} tool={tool} />
                     ))}

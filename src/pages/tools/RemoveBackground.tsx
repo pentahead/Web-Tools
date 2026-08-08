@@ -116,41 +116,43 @@ export default function RemoveBackground() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <div className="flex-1 p-6 flex flex-col overflow-y-auto">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="bg-purple-600 p-2 rounded-lg text-white">
-            <Eraser size={24} />
+    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-background">
+      <div className="flex-1 p-8 md:p-12 flex flex-col overflow-y-auto">
+        <div className="mb-8 flex items-center gap-4 max-w-[1200px] mx-auto w-full">
+          <div className="bg-primary p-3 rounded-lg text-primary-foreground shadow-sm">
+            <Eraser size={28} strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Remove Background</h2>
-            <p className="text-sm text-slate-500">Remove backgrounds from your images instantly.</p>
+            <h2 className="text-3xl font-display font-medium tracking-tight text-foreground mb-1">Remove Background</h2>
+            <p className="text-[15px] font-light text-muted-foreground">Remove backgrounds from your images instantly.</p>
           </div>
         </div>
 
         {!file && state !== 'error' ? (
-          <FileUploadZone 
-            accept="image/png, image/jpeg, image/jpg"
-            maxSizeMB={10}
-            multiple={false}
-            onFilesSelected={handleFilesSelected}
-            title="Drop your image here"
-            subtitle="PNG • JPG • JPEG (Max 10 MB)"
-          />
+          <div className="max-w-[1200px] mx-auto w-full flex-1 flex flex-col">
+            <FileUploadZone 
+              accept="image/png, image/jpeg, image/jpg"
+              maxSizeMB={10}
+              multiple={false}
+              onFilesSelected={handleFilesSelected}
+              title="Drop your image here"
+              subtitle="PNG • JPG • JPEG (Max 10 MB)"
+            />
+          </div>
         ) : (
-          <div className="flex flex-col flex-1 mx-auto w-full space-y-6">
+          <div className="flex flex-col flex-1 mx-auto max-w-[1200px] w-full space-y-6">
             
             {file && (
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm flex items-center justify-between">
+              <div className="bg-card border border-border p-5 rounded-[10px] flex items-center justify-between transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg text-slate-500">
-                    <ImageIcon size={24} />
+                  <div className="bg-secondary p-3 rounded-[6px] text-foreground border border-border">
+                    <ImageIcon size={24} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-xs md:max-w-md">
+                    <p className="font-display font-medium text-[16px] text-foreground truncate max-w-xs md:max-w-md">
                       {file.name}
                     </p>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-[13px] font-light text-muted-foreground mt-1">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -158,37 +160,37 @@ export default function RemoveBackground() {
                 <button 
                   onClick={handleRemove}
                   disabled={state === 'processing' || state === 'applying'}
-                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-[6px] transition-colors disabled:opacity-50"
                 >
-                  <X size={20} />
+                  <X size={20} strokeWidth={1.5} />
                 </button>
               </div>
             )}
 
             {/* States */}
             {(state === 'processing' || state === 'applying') && (
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center">
-                <Loader2 className="w-10 h-10 animate-spin mb-4 text-purple-500" />
-                <h3 className="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-2">Removing background...</h3>
-                <p className="text-slate-500 mb-6">{progressMsg}</p>
-                <div className="w-full max-w-md bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
-                  <div className="bg-purple-600 h-full rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }}></div>
+              <div className="bg-card p-10 rounded-[12px] border border-border flex flex-col items-center">
+                <Loader2 className="w-10 h-10 animate-spin mb-6 text-primary" strokeWidth={1.5} />
+                <h3 className="font-display font-medium text-[20px] text-foreground mb-2 tracking-tight">Removing background...</h3>
+                <p className="text-[14px] font-light text-muted-foreground mb-8">{progressMsg}</p>
+                <div className="w-full max-w-md bg-secondary rounded-full h-2 overflow-hidden mb-2">
+                  <div className="bg-primary h-2 rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }}></div>
                 </div>
                 {progressPct < 20 && (
-                   <p className="text-xs text-slate-400 mt-4">The first conversion may take a little longer while the AI model loads.</p>
+                   <p className="text-[12px] font-light text-muted-foreground mt-5">The first conversion may take a little longer while the AI model loads.</p>
                 )}
               </div>
             )}
 
             {state === 'error' && (
-              <div className="bg-red-50 dark:bg-red-900/20 p-8 rounded-xl border border-red-200 dark:border-red-800/30 shadow-sm flex flex-col items-center text-center">
-                <h3 className="font-semibold text-xl text-red-800 dark:text-red-300 mb-2">We couldn't process this image.</h3>
-                <p className="text-red-700/80 dark:text-red-400/80 mb-6 max-w-md">
+              <div className="bg-card p-10 rounded-[12px] border border-destructive/30 flex flex-col items-center text-center">
+                <h3 className="font-display font-medium text-[20px] text-foreground mb-3 tracking-tight">We couldn't process this image.</h3>
+                <p className="text-[14px] font-light text-muted-foreground mb-8 max-w-md">
                   {error || "Please try another file."}
                 </p>
                 <button 
                   onClick={handleRemove}
-                  className="py-2.5 px-6 rounded-lg font-medium bg-red-200 hover:bg-red-300 dark:bg-red-800 dark:hover:bg-red-700 text-red-900 dark:text-red-100 transition-colors"
+                  className="py-3 px-8 rounded-[8px] font-display font-medium bg-secondary text-foreground hover:bg-border transition-colors border border-border"
                 >
                   Choose Another Image
                 </button>
@@ -198,35 +200,37 @@ export default function RemoveBackground() {
             {(state === 'idle' || state === 'completed') && file && originalUrl && (
                <div className="flex flex-col md:flex-row gap-6 h-full">
                  <div className="flex-1 flex flex-col min-h-[300px]">
-                   <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Original</h3>
-                   <div className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 flex items-center justify-center p-4">
-                     <img src={originalUrl} alt="Original" className="max-w-full max-h-[500px] object-contain rounded" />
+                   <h3 className="text-[12px] font-display font-bold text-muted-foreground mb-3 uppercase tracking-widest">Original</h3>
+                   <div className="flex-1 bg-secondary/30 rounded-[10px] overflow-hidden border border-border flex items-center justify-center p-6 relative">
+                     <div className="absolute inset-0 opacity-[0.03]" 
+                       style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                     <img src={originalUrl} alt="Original" className="max-w-full max-h-[500px] object-contain rounded-[4px] relative z-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-border" />
                    </div>
                  </div>
 
                  <div className="flex-1 flex flex-col min-h-[300px]">
-                   <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider flex justify-between items-center">
+                   <h3 className="text-[12px] font-display font-bold text-muted-foreground mb-3 uppercase tracking-widest flex justify-between items-center">
                      <span>Result</span>
                      {state === 'completed' && (
-                       <div className="flex gap-1">
-                         <button onClick={() => setPreviewBg('transparent')} className={cn("px-2 py-1 rounded text-xs", previewBg === 'transparent' ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200' : 'text-slate-400 hover:text-slate-600')}>Transp</button>
-                         <button onClick={() => setPreviewBg('white')} className={cn("px-2 py-1 rounded text-xs", previewBg === 'white' ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200' : 'text-slate-400 hover:text-slate-600')}>White</button>
-                         <button onClick={() => setPreviewBg('black')} className={cn("px-2 py-1 rounded text-xs", previewBg === 'black' ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200' : 'text-slate-400 hover:text-slate-600')}>Black</button>
+                       <div className="flex gap-2">
+                         <button onClick={() => setPreviewBg('transparent')} className={cn("px-3 py-1.5 rounded-[4px] text-[10px] uppercase font-bold tracking-wider transition-colors", previewBg === 'transparent' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground')}>Transp</button>
+                         <button onClick={() => setPreviewBg('white')} className={cn("px-3 py-1.5 rounded-[4px] text-[10px] uppercase font-bold tracking-wider transition-colors border border-border", previewBg === 'white' ? 'bg-white text-black' : 'text-muted-foreground hover:text-foreground bg-secondary/50')}>White</button>
+                         <button onClick={() => setPreviewBg('black')} className={cn("px-3 py-1.5 rounded-[4px] text-[10px] uppercase font-bold tracking-wider transition-colors border border-border", previewBg === 'black' ? 'bg-black text-white' : 'text-muted-foreground hover:text-foreground bg-secondary/50')}>Black</button>
                        </div>
                      )}
                    </h3>
                    <div className={cn(
-                     "flex-1 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 flex items-center justify-center p-4 relative",
+                     "flex-1 rounded-[10px] overflow-hidden border border-border flex items-center justify-center p-6 relative transition-colors duration-300",
                      previewBg === 'transparent' && 'bg-[url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/ENF5gIuL+F3AwMDgPw0U4yFSAgAupA4FTb8eRwAAAABJRU5ErkJggg==")]',
                      previewBg === 'white' && 'bg-white',
                      previewBg === 'black' && 'bg-black'
                    )}>
                      {state === 'completed' && resultUrl ? (
-                       <img src={resultUrl} alt="Result" className="max-w-full max-h-[500px] object-contain rounded" />
+                       <img src={resultUrl} alt="Result" className="max-w-full max-h-[500px] object-contain rounded-[4px] relative z-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)]" />
                      ) : (
-                       <div className="flex flex-col items-center justify-center text-slate-400 h-full">
-                         <ImageIcon size={48} className="mb-4 opacity-50" />
-                         <p>Result will appear here</p>
+                       <div className="flex flex-col items-center justify-center text-muted-foreground h-full relative z-10">
+                         <ImageIcon size={48} className="mb-4 opacity-30" strokeWidth={1} />
+                         <p className="font-light text-[14px]">Result will appear here</p>
                        </div>
                      )}
                    </div>
@@ -239,23 +243,23 @@ export default function RemoveBackground() {
 
       {/* Settings Sidebar */}
       {file && (state === 'idle' || state === 'completed') && (
-        <aside className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col overflow-y-auto shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
-          <div className="p-6 flex-1">
-            <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-slate-800 dark:text-slate-200">
+        <aside className="w-full lg:w-[340px] border-t lg:border-t-0 lg:border-l border-border bg-card flex flex-col overflow-y-auto shrink-0 z-20">
+          <div className="p-8 flex-1">
+            <h3 className="font-display font-medium text-[16px] mb-8 text-foreground tracking-tight">
               Details
             </h3>
 
             {state === 'completed' ? (
               <div className="space-y-4">
-                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800/30">
-                   <h4 className="font-medium text-green-800 dark:text-green-300 mb-1">Background removed</h4>
-                   <p className="text-sm text-green-700/80 dark:text-green-400/80 font-mono break-all">{getOutputFilename(file.name)}</p>
-                   <p className="text-xs text-green-600/80 dark:text-green-500/80 mt-2">{(resultSize / 1024 / 1024).toFixed(2)} MB • PNG</p>
+                 <div className="bg-secondary p-5 rounded-[10px] border border-foreground">
+                   <h4 className="font-display font-medium text-[15px] text-foreground mb-2">Background removed</h4>
+                   <p className="text-[13px] font-light text-muted-foreground break-all">{getOutputFilename(file.name)}</p>
+                   <p className="text-[11px] font-display font-bold uppercase tracking-widest text-foreground mt-4">{(resultSize / 1024 / 1024).toFixed(2)} MB • PNG</p>
                  </div>
               </div>
             ) : (
               <div className="space-y-4">
-                 <p className="text-sm text-slate-600 dark:text-slate-400">
+                 <p className="text-[14px] font-light text-muted-foreground leading-relaxed">
                    Ready to process. Best results with clear subjects and distinct backgrounds.
                  </p>
               </div>
@@ -263,11 +267,11 @@ export default function RemoveBackground() {
             
           </div>
 
-          <div className="mt-auto p-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+          <div className="mt-auto p-8 bg-secondary/30 border-t border-border">
             {state === 'idle' ? (
                <button 
                  onClick={handleProcess}
-                 className="w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center transition-all duration-200 bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white shadow-md hover:shadow-lg"
+                 className="w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center transition-colors bg-primary hover:bg-primary-hover text-primary-foreground"
                >
                  Remove Background
                </button>
@@ -275,15 +279,15 @@ export default function RemoveBackground() {
                <a 
                  href={resultUrl || '#'}
                  download={getOutputFilename(file.name)}
-                 className="w-full py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center transition-all duration-200 bg-green-600 hover:bg-green-700 active:scale-[0.98] text-white shadow-md hover:shadow-lg"
+                 className="w-full py-4 px-4 rounded-[8px] font-display font-semibold flex items-center justify-center transition-colors bg-primary hover:bg-primary-hover text-primary-foreground"
                >
-                 <Download className="w-5 h-5 mr-2" />
+                 <Download className="w-5 h-5 mr-2" strokeWidth={2} />
                  Download PNG
                </a>
             )}
             
-            <p className="text-xs text-center text-slate-500 mt-4">
-              Your image is processed locally in your browser and is not uploaded to a server.
+            <p className="text-[12px] font-light text-center text-muted-foreground mt-5">
+              Your image is processed locally in your browser.
             </p>
           </div>
         </aside>
