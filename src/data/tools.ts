@@ -1,4 +1,4 @@
-import { ImageIcon, FileText, FileImage, FileDown, Layers } from 'lucide-react';
+import { ImageIcon, FileText, FileImage, FileDown, Layers, Eraser } from 'lucide-react';
 import type { Tool } from '../types/tools';
 
 export const tools: Tool[] = [
@@ -18,6 +18,15 @@ export const tools: Tool[] = [
     category: "image",
     icon: FileText,
     href: "/tools/image-to-pdf",
+    status: "available",
+  },
+  {
+    id: "remove-background",
+    name: "Remove Background",
+    description: "Remove image backgrounds and create transparent PNGs.",
+    category: "image",
+    icon: Eraser,
+    href: "/tools/remove-background",
     status: "available",
   },
   {
