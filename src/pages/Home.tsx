@@ -1,10 +1,28 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { tools } from '@/data/tools';
 import ToolCard from '@/components/tools/ToolCard';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const sectionId = location.hash.replace('#', '');
+      if (sectionId === 'top-section' || sectionId === 'top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }
+      }
+    }
+  }, [location.hash]);
 
   const filteredTools = useMemo(() => {
     if (!searchQuery.trim()) return tools;
@@ -23,8 +41,8 @@ export default function Home() {
     <div className="flex-1 overflow-y-auto">
       <div className="w-full py-16 md:py-24 px-6 md:px-12">
         
-        {/* Hero Section */}
-        <section className="mb-20 max-w-2xl">
+        {/* Hero Section (About & Privacy overview) */}
+        <section id="top-section" className="mb-20 max-w-2xl scroll-mt-20">
           <h1 className="text-[clamp(34px,5vw,56px)] font-light leading-[1.05] tracking-[-0.02em] text-foreground mb-6">
             Files shouldn't be <em className="not-italic bg-primary text-black px-2 rounded-md font-normal">hard</em>.
           </h1>
@@ -47,7 +65,7 @@ export default function Home() {
         </section>
 
         {/* Tools Section */}
-        <section className="border-t border-border pt-16">
+        <section id="tools-section" className="border-t border-border pt-16 scroll-mt-20">
           <span className="font-display text-[11px] font-semibold tracking-[0.1em] uppercase text-muted-foreground block mb-8">
             Product Line
           </span>
