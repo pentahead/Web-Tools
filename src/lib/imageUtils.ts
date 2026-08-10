@@ -43,7 +43,7 @@ export function compareFileSizes(originalSize: number, outputSize: number) {
   };
 }
 
-export function loadImage(source: string | File): Promise<HTMLImageElement> {
+export function loadImage(source: string | File | Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';

@@ -1,7 +1,16 @@
-import { ImageIcon, FileText, FileImage, FileDown, Layers, Eraser, Sparkles } from 'lucide-react';
+import { ImageIcon, FileText, FileImage, FileDown, Layers, Eraser, Sparkles, Palette } from 'lucide-react';
 import type { Tool } from '../types/tools';
 
 export const tools: Tool[] = [
+  {
+    id: "change-background",
+    name: "Change Background",
+    description: "Replace your image background with any color.",
+    category: "image",
+    icon: Palette,
+    href: "/tools/change-background",
+    status: "available",
+  },
   {
     id: "image-to-webp",
     name: "Image to WebP",
