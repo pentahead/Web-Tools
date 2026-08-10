@@ -1,11 +1,20 @@
-import { ImageIcon, FileText, FileImage, FileDown, Layers, Eraser } from 'lucide-react';
+import { ImageIcon, FileText, FileImage, FileDown, Layers, Eraser, Sparkles } from 'lucide-react';
 import type { Tool } from '../types/tools';
 
 export const tools: Tool[] = [
   {
+    id: "image-to-webp",
+    name: "Image to WebP",
+    description: "Convert PNG, JPG, and JPEG images into WebP format.",
+    category: "image",
+    icon: Sparkles,
+    href: "/tools/image-to-webp",
+    status: "available",
+  },
+  {
     id: "image-to-svg",
     name: "Image to SVG",
-    description: "Convert PNG and JPG images into SVG.",
+    description: "Convert PNG, JPG, and JPEG images into SVG.",
     category: "image",
     icon: ImageIcon,
     href: "/tools/image-to-svg",

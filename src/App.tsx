@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import Home from './pages/Home';
 import ImageToSvg from './pages/tools/ImageToSvg';
+import ImageToWebp from './pages/tools/ImageToWebp';
 import ImageToPdf from './pages/tools/ImageToPdf';
 import PdfToWord from './pages/tools/PdfToWord';
 import RemoveBackground from './pages/tools/RemoveBackground';
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />
           <Route path="tools/image-to-svg" element={<ImageToSvg />} />
+          <Route path="tools/image-to-webp" element={<ImageToWebp />} />
           <Route path="tools/image-to-pdf" element={<ImageToPdf />} />
           <Route path="tools/remove-background" element={<RemoveBackground />} />
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
